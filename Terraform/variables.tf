@@ -1,11 +1,14 @@
 variable "base" {
-    description = "Base of URL"
+  description = "Base of URL"
+  type        = string
 }
 
-variable "subnet2" {
-    description = "Subnet"
+variable "subnet" {
+  description = "Subnet"
+  type        = string
 }
 
 variable "mask" {
-    description = "Subnet Mask"
+  description = "Subnet Mask"
+  type        = string
 }

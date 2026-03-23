@@ -1,26 +1,23 @@
 ---
 - name: API Call
-  ansible.builtin.uri: 
-    url: https://networkcalc.com/api/ip/{{ subnet }}/{{ mask }}
+  ansible.builtin.uri:
+    url: "https://networkcalc.com/api/ip/{{ subnet }}/{{ mask }}"
+    method: GET
     return_content: yes
     validate_certs: no
   register: result
-- name: Assignable Hosts
+
+- name: Assign facts from API response
   set_fact:
-    hosts: " "
-- name: First Address
-  set_fact:
-    first_ip: " "
-- name: Subnet Mask - Decimal
-  set_fact:
-    mask_decimal: " "
-- name: Subnet Mask - CIDR Notation
-  set_fact:
-    mask_cidr: "/"
+    assignable_hosts: "{{ result.json.address.assignable_hosts }}"
+    first_ip: "{{ result.json.address.first_assignable_host }}"
+    mask_decimal: "{{ result.json.address.subnet_mask }}"
+    mask_cidr: "/{{ result.json.address.subnet_bits }}"
+
 - name: Print Results
   debug:
-    msg: 
-      - "There are {{ hosts }} assignable hosts for the {{ subnet }}/{{ mask }} subnet"
+    msg:
+      - "There are {{ assignable_hosts }} assignable hosts for the {{ subnet }}/{{ mask }} subnet"
       - "The first address is {{ first_ip }}"
       - "The subnet mask in decimal form is {{ mask_decimal }}"
       - "The subnet mask in cidr notation is {{ mask_cidr }}"

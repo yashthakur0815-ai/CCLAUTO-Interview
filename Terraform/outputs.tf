@@ -1,3 +1,3 @@
 output "results" {
-    value = data.http.api_url.respnose_body
+  value = jsondecode(data.http.api_url.response_body)
 }
